@@ -1,7 +1,7 @@
 # Task Management Application
 
 This is a Laravel-based task management application with Vue.js and Inertia.js for the frontend. It includes basic user
-registration, login, and task management functionalities. This project is built as part of an onboarding assessment.
+registration, login, and task management functionalities.
 
 ## Technologies Used
 
