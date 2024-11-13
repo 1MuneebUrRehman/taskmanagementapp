@@ -20,17 +20,13 @@ const form = useForm({
 });
 
 function submitForm() {
-    console.log('submit form');
-    console.log(form);
-    console.log(form.is_completed);
     if (!form.title || !form.description) {
-        form.errors.title = form.title ? '' : 'Title is required'; // Simplify error handling
+        form.errors.title = form.title ? '' : 'Title is required';
         form.errors.description = form.description ? '' : 'Description is required';
         return;
     }
 
     form.post(route('tasks.store'));
-    console.log(form.wasSuccessful);
     if (form.wasSuccessful) {
         form.reset(); // Reset form errors
     }

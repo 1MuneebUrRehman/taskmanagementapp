@@ -23,7 +23,7 @@ const form = useForm({
 function submitForm() {
     // Check if any field is empty
     if (!form.title || !form.description) {
-        form.errors.title = form.title ? '' : 'Title is required'; // Simplify error handling
+        form.errors.title = form.title ? '' : 'Title is required';
         form.errors.description = form.description ? '' : 'Description is required';
         return;
     }
