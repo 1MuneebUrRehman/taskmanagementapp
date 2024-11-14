@@ -25,7 +25,7 @@ registration, login, and task management functionalities.
 
    ```bash
    git clone https://github.com/1MuneebUrRehman/taskmanagementapp.git
-   cd your-repo-name
+   cd taskmanagementapp
 
 2. **Install dependencies**
 
