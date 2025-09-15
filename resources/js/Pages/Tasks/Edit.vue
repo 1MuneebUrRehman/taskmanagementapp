@@ -52,11 +52,11 @@ function submitForm() {
 
         <div class="py-12 mx-auto max-w-7xl sm:px-6 lg:px-8 space-y-6">
             <div class="overflow-hidden shadow-sm sm:rounded-lg space-y-6">
-                <div class="p-6 sm:p-8 bg-white shadow sm:rounded-lg">
+                <div class="p-6 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
                     <header class="flex justify-between items-center">
-                        <h2 class="text-lg font-medium text-gray-900">Edit Task</h2>
+                        <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">Edit Task</h2>
                         <Link :href="route('tasks.index')" as="button"
-                              class="rounded-md bg-gray-200 px-4 py-2 text-center text-sm text-gray-800 hover:bg-gray-300 hover:text-gray-900 inline-block">
+                              class="rounded-md bg-gray-200 px-4 py-2 text-center text-sm text-gray-800 hover:bg-gray-300 hover:text-gray-900 inline-block dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600 dark:hover:text-gray-100">
                             Back
                         </Link>
                     </header>

@@ -52,10 +52,10 @@ const deleteTask = () => {
 
         <div class="py-12 mx-auto max-w-7xl sm:px-6 lg:px-8 space-y-6">
             <!-- Table Container -->
-            <div class="overflow-hidden bg-white shadow rounded-lg">
+            <div class="overflow-hidden bg-white dark:bg-gray-800 shadow rounded-lg">
                 <table class="w-full whitespace-no-wrap">
                     <thead>
-                    <tr class=" border-b bg-blue-50 text-left text-xs font-semibold uppercase tracking-wide text-blue-600">
+                    <tr class=" border-b bg-blue-50 text-left text-xs font-semibold uppercase tracking-wide text-blue-600 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-700">
                         <th class="px-6 py-3">Title</th>
                         <th class="px-6 py-3">Description</th>
                         <th class="px-6 py-3">Completed</th>
@@ -64,24 +64,24 @@ const deleteTask = () => {
                     </thead>
                     <tbody>
                     <tr v-for="task in tasks.data" :key="task.id"
-                        class="hover:bg-gray-50 transition ease-in-out duration-150">
-                        <td class="px-6 py-4 border-b">
-                            <p class="text-gray-900 font-semibold">{{ task.title }}</p>
+                        class="hover:bg-gray-50 dark:hover:bg-gray-700 transition ease-in-out duration-150">
+                        <td class="px-6 py-4 border-b dark:border-gray-700">
+                            <p class="text-gray-900 dark:text-gray-100 font-semibold">{{ task.title }}</p>
                         </td>
-                        <td class="px-6 py-4 border-b">
-                            <p class="text-gray-900 font-semibold">{{ task.description }}</p>
+                        <td class="px-6 py-4 border-b dark:border-gray-700">
+                            <p class="text-gray-900 dark:text-gray-100 font-semibold">{{ task.description }}</p>
                         </td>
-                        <td class="px-6 py-4 border-b">
+                        <td class="px-6 py-4 border-b dark:border-gray-700">
                         <span v-if="task.is_completed"
-                              class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-green-100 text-green-800">
+                              class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
                             Completed
                         </span>
                             <span v-else
-                                  class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-red-100 text-red-800">
+                                  class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200">
                             Not Completed
                         </span>
                         </td>
-                        <td class="px-6 py-4 border-b">
+                        <td class="px-6 py-4 border-b dark:border-gray-700">
                             <div class="flex space-x-2 ">
                                 <Link :href="route('tasks.edit', task)"
                                       class="inline-flex items-center px-3 py-1.5 bg-yellow-400 text-white rounded-md font-medium hover:bg-yellow-500 transition duration-150">
@@ -106,11 +106,11 @@ const deleteTask = () => {
             <!-- Delete Confirmation Modal -->
             <Modal :show="confirmingTaskDeletion" @close="closeModal">
                 <div class="p-6 text-center">
-                    <h2 class="text-lg font-semibold text-gray-900 mb-4">Confirm Deletion</h2>
-                    <p class="text-sm text-gray-600 mb-6">This action cannot be undone. Are you sure you want to delete
+                    <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Confirm Deletion</h2>
+                    <p class="text-sm text-gray-600 dark:text-gray-300 mb-6">This action cannot be undone. Are you sure you want to delete
                         this task?</p>
                     <div class="flex justify-center space-x-4">
-                        <button class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition duration-150"
+                        <button class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition duration-150 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
                                 @click="closeModal">
                             Cancel
                         </button>
