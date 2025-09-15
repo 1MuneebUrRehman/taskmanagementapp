@@ -5,6 +5,7 @@ import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
 import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
+import ThemeToggle from '@/Components/ThemeToggle.vue';
 import {Link} from '@inertiajs/vue3';
 
 const showingNavigationDropdown = ref(false);
@@ -50,6 +51,8 @@ const showingNavigationDropdown = ref(false);
                         </div>
 
                         <div class="hidden sm:ms-6 sm:flex sm:items-center">
+                            <!-- Theme Toggle -->
+                            <ThemeToggle class="me-4" />
                             <!-- Settings Dropdown -->
                             <div class="relative ms-3">
                                 <Dropdown align="right" width="48">
@@ -171,7 +174,7 @@ const showingNavigationDropdown = ref(false);
                             >
                                 {{ $page.props.auth.user.name }}
                             </div>
-                            <div class="text-sm font-medium text-gray-500">
+                            <div class="text-sm font-medium text-gray-500 dark:text-gray-400">
                                 {{ $page.props.auth.user.email }}
                             </div>
                         </div>
