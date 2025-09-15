@@ -26,6 +26,13 @@ class TaskController extends Controller
         return Inertia::render('Tasks/Create');
     }
 
+    public function show(Task $task)
+    {
+        return Inertia::render('Tasks/Show', [
+            'task' => $task,
+        ]);
+    }
+
     /**
      * Show the form for editing the specified resource.
      */

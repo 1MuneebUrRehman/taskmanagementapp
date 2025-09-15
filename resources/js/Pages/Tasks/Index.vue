@@ -52,12 +52,11 @@ const deleteTask = () => {
 
         <div class="py-12 mx-auto max-w-7xl sm:px-6 lg:px-8 space-y-6">
             <!-- Table Container -->
-            <div class="overflow-hidden bg-white dark:bg-gray-800 shadow rounded-lg">
-                <table class="w-full whitespace-no-wrap">
+            <div class="overflow-x-auto bg-white dark:bg-gray-800 shadow rounded-lg">
+                <table class="min-w-full w-full whitespace-normal break-words">
                     <thead>
                     <tr class=" border-b bg-blue-50 text-left text-xs font-semibold uppercase tracking-wide text-blue-600 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-700">
                         <th class="px-6 py-3">Title</th>
-                        <th class="px-6 py-3">Description</th>
                         <th class="px-6 py-3">Completed</th>
                         <th class="px-6 py-3">Actions</th>
                     </tr>
@@ -67,9 +66,6 @@ const deleteTask = () => {
                         class="hover:bg-gray-50 dark:hover:bg-gray-700 transition ease-in-out duration-150">
                         <td class="px-6 py-4 border-b dark:border-gray-700">
                             <p class="text-gray-900 dark:text-gray-100 font-semibold">{{ task.title }}</p>
-                        </td>
-                        <td class="px-6 py-4 border-b dark:border-gray-700">
-                            <p class="text-gray-900 dark:text-gray-100 font-semibold">{{ task.description }}</p>
                         </td>
                         <td class="px-6 py-4 border-b dark:border-gray-700">
                         <span v-if="task.is_completed"
@@ -82,7 +78,11 @@ const deleteTask = () => {
                         </span>
                         </td>
                         <td class="px-6 py-4 border-b dark:border-gray-700">
-                            <div class="flex space-x-2 ">
+                            <div class="flex flex-wrap gap-2 sm:flex-nowrap">
+                                <Link :href="route('tasks.show', task)"
+                                      class="inline-flex items-center px-3 py-1.5 bg-blue-500 text-white rounded-md font-medium hover:bg-blue-600 transition duration-150">
+                                    View
+                                </Link>
                                 <Link :href="route('tasks.edit', task)"
                                       class="inline-flex items-center px-3 py-1.5 bg-yellow-400 text-white rounded-md font-medium hover:bg-yellow-500 transition duration-150">
                                     Edit
@@ -99,7 +99,7 @@ const deleteTask = () => {
             </div>
 
             <!-- Pagination -->
-            <div class="flex flex-col items-center px-5 py-5 xs:flex-row xs:justify-between">
+            <div class="flex flex-col items-center gap-3 px-5 py-5 sm:flex-row sm:justify-between">
                 <pagination :links="tasks.links"/>
             </div>
 
