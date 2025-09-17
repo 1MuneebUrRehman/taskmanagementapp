@@ -10,119 +10,255 @@ import Switch from "@/Components/Switch.vue";
 import TextArea from "@/Components/TextArea.vue";
 
 const props = defineProps({
-    task: Object
+  task: Object
 });
 
-
 const form = useForm({
-    title: props.task.title,
-    description: props.task.description,
-    is_completed: props.task.is_completed,
+  title: props.task.title,
+  description: props.task.description,
+  is_completed: props.task.is_completed,
 });
 
 function submitForm() {
-    // Check if any field is empty
-    if (!form.title || !form.description) {
-        form.errors.title = form.title ? '' : 'Title is required';
-        form.errors.description = form.description ? '' : 'Description is required';
-        return;
-    }
-    // Submit form
-    form.patch(route('tasks.update', props.task));
-    if (form.wasSuccessful) {
-        form.reset();
-    }
+  // Check if any field is empty
+  if (!form.title || !form.description) {
+    form.errors.title = form.title ? '' : 'Title is required';
+    form.errors.description = form.description ? '' : 'Description is required';
+    return;
+  }
+  // Submit form
+  form.patch(route('tasks.update', props.task));
+  if (form.wasSuccessful) {
+    form.reset();
+  }
 }
-
 </script>
 
 <template>
-    <Head title="Edit Task"/>
+  <Head title="Edit Task"/>
+  <AuthenticatedLayout>
+    <template #header>
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0">
+        <div>
+          <h1 class="text-3xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+            Edit Task
+          </h1>
+          <p class="text-gray-600 dark:text-gray-300 mt-2">
+            Update your task details
+          </p>
+        </div>
+        <Link
+            :href="route('tasks.index')"
+            class="group inline-flex items-center space-x-2 px-6 py-3 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-xl font-medium transition-all duration-200 hover:scale-105"
+        >
+          <svg class="w-4 h-4 group-hover:-translate-x-1 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+          </svg>
+          <span>Back to Tasks</span>
+        </Link>
+      </div>
+    </template>
 
-    <AuthenticatedLayout>
-        <template #header>
-            <div class="flex justify-between items-center">
-                <h2
-                    class="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200"
-                >
-                    Edit Task
-                </h2>
+    <div class="py-8 mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+      <!-- Progress Indicator -->
+      <div class="mb-8">
+        <div class="flex items-center justify-between text-sm text-gray-600 dark:text-gray-400 mb-2">
+          <span>Edit Task</span>
+          <span>Step 1 of 1</span>
+        </div>
+        <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+          <div class="bg-gradient-to-r from-amber-500 to-amber-600 h-2 rounded-full w-full transition-all duration-300"></div>
+        </div>
+      </div>
+
+      <!-- Main Form Card -->
+      <div class="bg-white/70 dark:bg-gray-800/70 backdrop-blur-xl rounded-2xl shadow-lg shadow-amber-500/5 border border-white/20 dark:border-gray-700/30 overflow-hidden">
+        <!-- Card Header -->
+        <div class="px-8 py-6 bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 border-b border-white/20 dark:border-gray-700/30">
+          <div class="flex items-center space-x-3">
+            <div class="p-3 bg-gradient-to-r from-amber-500 to-amber-600 rounded-xl">
+              <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+              </svg>
             </div>
-        </template>
+            <div>
+              <h2 class="text-xl font-semibold text-gray-900 dark:text-white">Update Task Information</h2>
+              <p class="text-sm text-gray-600 dark:text-gray-400">Modify the details for your task</p>
+            </div>
+          </div>
+        </div>
 
-        <div class="py-12 mx-auto max-w-7xl sm:px-6 lg:px-8 space-y-6">
-            <div class="overflow-hidden shadow-sm sm:rounded-lg space-y-6">
-                <div class="p-6 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
-                    <header class="flex justify-between items-center">
-                        <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">Edit Task</h2>
-                        <Link :href="route('tasks.index')" as="button"
-                              class="rounded-md bg-gray-200 px-4 py-2 text-center text-sm text-gray-800 hover:bg-gray-300 hover:text-gray-900 inline-block dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600 dark:hover:text-gray-100">
-                            Back
-                        </Link>
-                    </header>
+        <!-- Form Content -->
+        <form @submit.prevent="submitForm" class="p-8 space-y-8">
+          <!-- Title Field -->
+          <div class="space-y-2">
+            <InputLabel for="title" class="text-base font-medium text-gray-900 dark:text-white flex items-center space-x-2">
+              <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+              </svg>
+              <span>Task Title</span>
+              <span class="text-red-500 text-sm">*</span>
+            </InputLabel>
+            <div class="relative">
+              <TextInput
+                  id="title"
+                  v-model="form.title"
+                  :class="{'border-red-300 dark:border-red-600': form.errors.title, 'border-gray-200 dark:border-gray-600 focus:border-amber-500 dark:focus:border-amber-400': !form.errors.title}"
+                  class="w-full pl-12 pr-4 py-4 bg-white/50 dark:bg-gray-700/50 backdrop-blur-sm rounded-xl border-2 transition-all duration-200 focus:ring-4 focus:ring-amber-500/20 dark:focus:ring-amber-400/20"
+                  placeholder="Enter a descriptive title for your task..."
+                  autocomplete="title"
+                  autofocus
+                  required
+                  type="text"
+              />
+              <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+              </div>
+            </div>
+            <InputError :message="form.errors.title" class="text-sm text-red-600 dark:text-red-400 ml-1" />
+          </div>
 
-                    <form class="mt-6 space-y-6" @submit.prevent="submitForm">
-                        <div>
-                            <InputLabel for="title" required="true" value="Title"/>
-
-                            <TextInput
-                                id="title"
-                                v-model="form.title"
-                                :class="{'border-red-500': form.errors.title}"
-                                autocomplete="title"
-                                autofocus
-                                class="mt-1 block w-full "
-                                required
-                                type="text"
-                            />
-                            <InputError :message="form.errors.title" class="mt-2"/>
-                        </div>
-
-                        <div>
-                            <InputLabel for="description" required="true" value="Description"/>
-
+          <!-- Description Field -->
+          <div class="space-y-2">
+            <InputLabel for="description" class="text-base font-medium text-gray-900 dark:text-white flex items-center space-x-2">
+              <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+              <span>Description</span>
+              <span class="text-red-500 text-sm">*</span>
+            </InputLabel>
+            <div class="relative">
                             <TextArea
                                 id="description"
                                 v-model="form.description"
+                                :class="{'border-red-300 dark:border-red-600': form.errors.description, 'border-gray-200 dark:border-gray-600 focus:border-amber-500 dark:focus:border-amber-400': !form.errors.description}"
+                                class="w-full pl-12 pr-4 py-4 bg-white/50 dark:bg-gray-700/50 backdrop-blur-sm rounded-xl border-2 transition-all duration-200 focus:ring-4 focus:ring-amber-500/20 dark:focus:ring-amber-400/20 min-h-[120px] resize-none"
+                                placeholder="Describe your task in detail..."
                                 autocomplete="description"
-                                class="mt-1 block w-full"
                                 required
-                                type="text"
                             />
-
-                            <InputError :message="form.errors.description" class="mt-2"/>
-                        </div>
-
-
-                        <div>
-                            <InputLabel for="completed" required="true" value="Completed"/>
-
-                            <Switch
-                                id="completed"
-                                v-model="form.is_completed"
-                                class="mt-2"
-                            />
-
-                            <InputError :message="form.errors.is_completed" class="mt-2"/>
-                        </div>
-
-                        <div class="flex items-center gap-4">
-                            <PrimaryButton :disabled="form.processing">Update</PrimaryButton>
-
-                            <Transition
-                                enter-active-class="transition ease-in-out"
-                                enter-from-class="opacity-0"
-                                leave-active-class="transition ease-in-out"
-                                leave-to-class="opacity-0"
-                            >
-                                <p v-if="form.recentlySuccessful" class="text-sm text-green-600">Updated.</p>
-                            </Transition>
-                        </div>
-                    </form>
-                </div>
+              <div class="absolute top-4 left-0 pl-4 flex items-start pointer-events-none">
+                <svg class="w-5 h-5 text-gray-400 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7" />
+                </svg>
+              </div>
             </div>
-        </div>
+            <InputError :message="form.errors.description" class="text-sm text-red-600 dark:text-red-400 ml-1" />
+          </div>
 
-    </AuthenticatedLayout>
+          <!-- Completion Status -->
+          <div class="space-y-4">
+            <InputLabel class="text-base font-medium text-gray-900 dark:text-white flex items-center space-x-2">
+              <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span>Task Status</span>
+            </InputLabel>
+            <div class="bg-gray-50 dark:bg-gray-800/50 rounded-xl p-6 border border-gray-200 dark:border-gray-600">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                  <div class="p-2 bg-green-100 dark:bg-green-900/20 rounded-lg">
+                    <svg class="w-5 h-5 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 class="text-sm font-medium text-gray-900 dark:text-white">Mark as Completed</h3>
+                    <p class="text-xs text-gray-600 dark:text-gray-400">Set this task as already completed</p>
+                  </div>
+                </div>
+                <Switch
+                    id="completed"
+                    v-model="form.is_completed"
+                    class="ml-4"
+                />
+              </div>
+            </div>
+            <InputError :message="form.errors.is_completed" class="text-sm text-red-600 dark:text-red-400 ml-1" />
+          </div>
+
+          <!-- Form Actions -->
+          <div class="flex flex-col sm:flex-row gap-4 pt-8 border-t border-gray-200 dark:border-gray-700">
+            <PrimaryButton
+                :disabled="form.processing"
+                class="group relative inline-flex items-center justify-center space-x-2 px-8 py-4 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-medium rounded-xl transform hover:scale-105 transition-all duration-200 shadow-lg shadow-amber-500/25 hover:shadow-xl hover:shadow-amber-500/40 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+            >
+              <svg v-if="form.processing" class="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              <svg v-else class="w-5 h-5 group-hover:scale-110 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+              </svg>
+              <span>{{ form.processing ? 'Updating...' : 'Update Task' }}</span>
+            </PrimaryButton>
+
+            <Link
+                :href="route('tasks.index')"
+                class="inline-flex items-center justify-center space-x-2 px-8 py-4 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 font-medium rounded-xl transition-all duration-200 hover:scale-105"
+            >
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+              <span>Cancel</span>
+            </Link>
+
+            <!-- Success Message -->
+            <Transition
+                enter-active-class="transition ease-out duration-300"
+                enter-from-class="opacity-0 transform scale-90"
+                enter-to-class="opacity-100 transform scale-100"
+                leave-active-class="transition ease-in duration-200"
+                leave-from-class="opacity-100 transform scale-100"
+                leave-to-class="opacity-0 transform scale-90"
+            >
+              <div v-if="form.recentlySuccessful" class="flex items-center space-x-2 px-4 py-2 bg-green-100 dark:bg-green-900/20 text-green-800 dark:text-green-400 rounded-xl border border-green-200 dark:border-green-800">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                </svg>
+                <span class="text-sm font-medium">Task updated successfully!</span>
+              </div>
+            </Transition>
+          </div>
+        </form>
+      </div>
+
+      <!-- Tips Card -->
+      <div class="mt-8 bg-amber-50 dark:bg-amber-900/20 backdrop-blur-sm rounded-2xl p-6 border border-amber-200 dark:border-amber-800">
+        <div class="flex items-start space-x-3">
+          <div class="p-2 bg-amber-100 dark:bg-amber-800/30 rounded-lg">
+            <svg class="w-5 h-5 text-amber-600 dark:text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <div>
+            <h3 class="text-sm font-medium text-amber-900 dark:text-amber-200 mb-1">💡 Pro Tips</h3>
+            <ul class="text-sm text-amber-800 dark:text-amber-300 space-y-1">
+              <li>• Keep titles concise but descriptive</li>
+              <li>• Provide enough detail in the description for context</li>
+              <li>• Update the status as you make progress on your task</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </AuthenticatedLayout>
 </template>
 
+<style scoped>
+/* Custom focus styles */
+.focus\:ring-4:focus {
+  --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+  --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(4px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+  box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
+}
+
+/* Smooth animations */
+* {
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 200ms;
+}
+</style>
