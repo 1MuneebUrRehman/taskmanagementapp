@@ -2,15 +2,65 @@
 
 namespace App\Models;
 
-use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Task extends Model
 {
-    protected $guarded = ['created_at', 'updated_at'];
+    use HasFactory, SoftDeletes;
 
-    public function getCreatedAtAttribute($value): string
+    protected $fillable = [
+        'user_id',
+        'title',
+        'description',
+        'is_completed',
+        // Scheduling
+        'start_date',
+        'due_date',
+        'completed_at',
+        'reminder_at',
+        // Categorization
+        'priority',
+        'status',
+        'project_id',
+        // Collaboration
+        'assigned_to',
+        'created_by',
+        'updated_by',
+        // System/meta
+        'archived',
+        'position',
+    ];
+
+    protected $casts = [
+        'is_completed' => 'boolean',
+        'archived' => 'boolean',
+        'start_date' => 'datetime',
+        'due_date' => 'datetime',
+        'completed_at' => 'datetime',
+        'reminder_at' => 'datetime',
+        'position' => 'integer',
+    ];
+
+    // Relationships
+    public function user()
     {
-        return Carbon::parse($value)->diffForHumans();
+        return $this->belongsTo(User::class);
+    }
+
+    public function assignedTo()
+    {
+        return $this->belongsTo(User::class, 'assigned_to');
+    }
+
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function updater()
+    {
+        return $this->belongsTo(User::class, 'updated_by');
     }
 }

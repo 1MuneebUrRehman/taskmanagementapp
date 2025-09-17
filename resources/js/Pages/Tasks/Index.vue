@@ -2,14 +2,33 @@
 import {defineProps, ref} from 'vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import Pagination from '@/Components/Pagination.vue';
-import {Head, Link, useForm} from '@inertiajs/vue3';
+import {Head, Link, router, useForm} from '@inertiajs/vue3';
 import Modal from "@/Components/Modal.vue";
 
 const props = defineProps({
-  tasks: Object
+  tasks: Object,
+  filters: {
+    type: Object,
+    default: () => ({})
+  }
 });
 
 const form = useForm({});
+
+// Filters state initialized from server-provided filters
+const filters = ref({
+  status: props.filters?.status ?? '',
+  priority: props.filters?.priority ?? '',
+  archived: props.filters?.archived ?? ''
+});
+
+const applyFilters = () => {
+  const params = {};
+  if (filters.value.status) params.status = filters.value.status;
+  if (filters.value.priority) params.priority = filters.value.priority;
+  if (filters.value.archived !== '') params.archived = filters.value.archived;
+  router.get(route('tasks.index'), params, { preserveState: true, replace: true });
+};
 
 const confirmingTaskDeletion = ref(false);
 const taskToDelete = ref(null);
@@ -103,6 +122,43 @@ const deleteTask = () => {
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Filters Bar -->
+      <div class="mb-6 bg-white/70 dark:bg-gray-800/70 backdrop-blur-xl rounded-2xl p-4 border border-white/20 dark:border-gray-700/30 shadow-lg shadow-blue-500/5">
+        <div class="flex flex-col md:flex-row md:items-end gap-4">
+          <div class="flex-1">
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Status</label>
+            <select v-model="filters.status" @change="applyFilters" class="w-full rounded-xl border-gray-200 dark:border-gray-600 bg-white/60 dark:bg-gray-800/60 px-3 py-2">
+              <option value="">All</option>
+              <option value="pending">Pending</option>
+              <option value="in_progress">In Progress</option>
+              <option value="completed">Completed</option>
+              <option value="blocked">Blocked</option>
+            </select>
+          </div>
+          <div class="flex-1">
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Priority</label>
+            <select v-model="filters.priority" @change="applyFilters" class="w-full rounded-xl border-gray-200 dark:border-gray-600 bg-white/60 dark:bg-gray-800/60 px-3 py-2">
+              <option value="">All</option>
+              <option value="low">Low</option>
+              <option value="normal">Normal</option>
+              <option value="high">High</option>
+              <option value="urgent">Urgent</option>
+            </select>
+          </div>
+          <div class="flex-1">
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Archived</label>
+            <select v-model="filters.archived" @change="applyFilters" class="w-full rounded-xl border-gray-200 dark:border-gray-600 bg-white/60 dark:bg-gray-800/60 px-3 py-2">
+              <option value="">All</option>
+              <option :value="true">Only Archived</option>
+              <option :value="false">Only Active</option>
+            </select>
+          </div>
+          <div class="pt-6 md:pt-0">
+            <button @click="filters = { status: '', priority: '', archived: '' }; applyFilters();" class="px-4 py-2 rounded-xl bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300">Clear</button>
           </div>
         </div>
       </div>

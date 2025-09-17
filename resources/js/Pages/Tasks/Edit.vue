@@ -17,6 +17,20 @@ const form = useForm({
   title: props.task.title,
   description: props.task.description,
   is_completed: props.task.is_completed,
+  // Scheduling
+  start_date: props.task.start_date,
+  due_date: props.task.due_date,
+  completed_at: props.task.completed_at,
+  reminder_at: props.task.reminder_at,
+  // Categorization
+  priority: props.task.priority ?? 'normal',
+  status: props.task.status ?? 'pending',
+  project_id: props.task.project_id,
+  // Collaboration
+  assigned_to: props.task.assigned_to,
+  // System/meta
+  archived: props.task.archived ?? false,
+  position: props.task.position,
 });
 
 function submitForm() {
@@ -177,6 +191,78 @@ function submitForm() {
               </div>
             </div>
             <InputError :message="form.errors.is_completed" class="text-sm text-red-600 dark:text-red-400 ml-1" />
+          </div>
+
+          <!-- Scheduling -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <InputLabel for="start_date">Start Date</InputLabel>
+              <input id="start_date" v-model="form.start_date" type="datetime-local" class="mt-1 w-full rounded-xl border-2 border-gray-200 dark:border-gray-600 bg-white/50 dark:bg-gray-700/50 px-3 py-2" />
+              <InputError :message="form.errors.start_date" />
+            </div>
+            <div>
+              <InputLabel for="due_date">Due Date</InputLabel>
+              <input id="due_date" v-model="form.due_date" type="datetime-local" class="mt-1 w-full rounded-xl border-2 border-gray-200 dark:border-gray-600 bg-white/50 dark:bg-gray-700/50 px-3 py-2" />
+              <InputError :message="form.errors.due_date" />
+            </div>
+            <div>
+              <InputLabel for="reminder_at">Reminder At</InputLabel>
+              <input id="reminder_at" v-model="form.reminder_at" type="datetime-local" class="mt-1 w-full rounded-xl border-2 border-gray-200 dark:border-gray-600 bg-white/50 dark:bg-gray-700/50 px-3 py-2" />
+              <InputError :message="form.errors.reminder_at" />
+            </div>
+            <div>
+              <InputLabel for="completed_at">Completed At</InputLabel>
+              <input id="completed_at" v-model="form.completed_at" type="datetime-local" class="mt-1 w-full rounded-xl border-2 border-gray-200 dark:border-gray-600 bg-white/50 dark:bg-gray-700/50 px-3 py-2" />
+              <InputError :message="form.errors.completed_at" />
+            </div>
+          </div>
+
+          <!-- Categorization -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div>
+              <InputLabel for="priority">Priority</InputLabel>
+              <select id="priority" v-model="form.priority" class="mt-1 w-full rounded-xl border-2 border-gray-200 dark:border-gray-600 bg-white/50 dark:bg-gray-700/50 px-3 py-2">
+                <option value="low">Low</option>
+                <option value="normal">Normal</option>
+                <option value="high">High</option>
+                <option value="urgent">Urgent</option>
+              </select>
+              <InputError :message="form.errors.priority" />
+            </div>
+            <div>
+              <InputLabel for="status">Status</InputLabel>
+              <select id="status" v-model="form.status" class="mt-1 w-full rounded-xl border-2 border-gray-200 dark:border-gray-600 bg-white/50 dark:bg-gray-700/50 px-3 py-2">
+                <option value="pending">Pending</option>
+                <option value="in_progress">In Progress</option>
+                <option value="completed">Completed</option>
+                <option value="blocked">Blocked</option>
+              </select>
+              <InputError :message="form.errors.status" />
+            </div>
+            <div>
+              <InputLabel for="project_id">Project ID</InputLabel>
+              <TextInput id="project_id" v-model="form.project_id" type="number" class="mt-1 w-full" />
+              <InputError :message="form.errors.project_id" />
+            </div>
+          </div>
+
+          <!-- Collaboration and Meta -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div>
+              <InputLabel for="assigned_to">Assigned To (User ID)</InputLabel>
+              <TextInput id="assigned_to" v-model="form.assigned_to" type="number" class="mt-1 w-full" />
+              <InputError :message="form.errors.assigned_to" />
+            </div>
+            <div>
+              <InputLabel for="position">Position</InputLabel>
+              <TextInput id="position" v-model="form.position" type="number" min="0" class="mt-1 w-full" />
+              <InputError :message="form.errors.position" />
+            </div>
+            <div class="flex items-center gap-3 pt-6">
+              <Switch id="archived" v-model="form.archived" />
+              <label class="text-sm text-gray-700 dark:text-gray-300" for="archived">Archived</label>
+              <InputError :message="form.errors.archived" />
+            </div>
           </div>
 
           <!-- Form Actions -->

@@ -159,6 +159,47 @@ function deleteTask() {
               </div>
               <div class="text-sm text-gray-600 dark:text-gray-400">{{ props.task.updated_at }}</div>
             </div>
+
+            <div class="space-y-2">
+              <div class="text-base font-medium text-gray-900 dark:text-white">Start Date</div>
+              <div class="text-sm text-gray-600 dark:text-gray-400">{{ props.task.start_date || '-' }}</div>
+            </div>
+            <div class="space-y-2">
+              <div class="text-base font-medium text-gray-900 dark:text-white">Due Date</div>
+              <div class="text-sm text-gray-600 dark:text-gray-400">{{ props.task.due_date || '-' }}</div>
+            </div>
+            <div class="space-y-2">
+              <div class="text-base font-medium text-gray-900 dark:text-white">Reminder At</div>
+              <div class="text-sm text-gray-600 dark:text-gray-400">{{ props.task.reminder_at || '-' }}</div>
+            </div>
+            <div class="space-y-2">
+              <div class="text-base font-medium text-gray-900 dark:text-white">Completed At</div>
+              <div class="text-sm text-gray-600 dark:text-gray-400">{{ props.task.completed_at || '-' }}</div>
+            </div>
+            <div class="space-y-2">
+              <div class="text-base font-medium text-gray-900 dark:text-white">Priority</div>
+              <div class="text-sm text-gray-600 dark:text-gray-400 capitalize">{{ props.task.priority }}</div>
+            </div>
+            <div class="space-y-2">
+              <div class="text-base font-medium text-gray-900 dark:text-white">Status</div>
+              <div class="text-sm text-gray-600 dark:text-gray-400 capitalize">{{ props.task.status }}</div>
+            </div>
+            <div class="space-y-2">
+              <div class="text-base font-medium text-gray-900 dark:text-white">Project ID</div>
+              <div class="text-sm text-gray-600 dark:text-gray-400">{{ props.task.project_id || '-' }}</div>
+            </div>
+            <div class="space-y-2">
+              <div class="text-base font-medium text-gray-900 dark:text-white">Assigned To</div>
+              <div class="text-sm text-gray-600 dark:text-gray-400">{{ props.task.assigned_to || '-' }}</div>
+            </div>
+            <div class="space-y-2">
+              <div class="text-base font-medium text-gray-900 dark:text-white">Position</div>
+              <div class="text-sm text-gray-600 dark:text-gray-400">{{ props.task.position ?? '-' }}</div>
+            </div>
+            <div class="space-y-2">
+              <div class="text-base font-medium text-gray-900 dark:text-white">Archived</div>
+              <div class="text-sm text-gray-600 dark:text-gray-400">{{ props.task.archived ? 'Yes' : 'No' }}</div>
+            </div>
           </div>
         </div>
       </div>
