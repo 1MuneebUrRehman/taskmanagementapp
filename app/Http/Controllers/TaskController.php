@@ -13,17 +13,54 @@ class TaskController extends Controller
     public function index(Request $request)
     {
         $base = auth()->user()->isSuperAdmin() ? Task::query() : auth()->user()->tasks();
+
         $query = $base
             ->when($request->filled('status'), fn($q) => $q->where('status', $request->string('status')))
             ->when($request->filled('priority'), fn($q) => $q->where('priority', $request->string('priority')))
-            ->when($request->filled('archived'), fn($q) => $q->where('archived', filter_var($request->input('archived'), FILTER_VALIDATE_BOOLEAN)))
+            ->when($request->filled('archived'), fn($q) =>
+            $q->where('archived', filter_var($request->input('archived'), FILTER_VALIDATE_BOOLEAN))
+            )
+            ->when($request->filled('assigned_to'), fn($q) =>
+            $q->where('assigned_to', $request->integer('assigned_to'))
+            )
+            ->when($request->filled('search'), fn($q) =>
+            $q->where(function($sub) use ($request) {
+                $search = $request->string('search');
+                $sub->where('title', 'like', "%{$search}%")
+                    ->orWhere('description', 'like', "%{$search}%");
+            })
+            )
+            ->when($request->filled('due_date'), function($q) use ($request) {
+                $now = now()->startOfDay();
+                $endOfWeek = now()->endOfWeek();
+                $nextWeek = now()->addWeek()->endOfWeek();
+
+                switch ($request->string('due_date')) {
+                    case 'overdue':
+                        $q->whereDate('due_date', '<', $now);
+                        break;
+                    case 'today':
+                        $q->whereDate('due_date', '=', $now);
+                        break;
+                    case 'this_week':
+                        $q->whereBetween('due_date', [$now, $endOfWeek]);
+                        break;
+                    case 'next_week':
+                        $q->whereBetween('due_date', [$endOfWeek->addDay(), $nextWeek]);
+                        break;
+                }
+            })
             ->orderByDesc('created_at');
 
         $tasks = $query->paginate(10)->withQueryString();
 
+        // Load users for the "Assigned To" filter
+        $users = User::select('id','name')->get();
+
         return Inertia::render('Tasks/Index', [
             'tasks' => $tasks,
-            'filters' => $request->only(['status','priority','archived'])
+            'filters' => $request->only(['status','priority','archived','assigned_to','due_date','search']),
+            'users' => $users,
         ]);
     }
 
