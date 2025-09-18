@@ -12,10 +12,18 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        // Create a super admin user (password: "password")
+        $superAdmin = User::factory()->create([
+            'name' => 'Super Admin',
+            'email' => 'admin@example.com',
+            'role' => 'super-admin',
+        ]);
+
         // Create a known test user (password: "password")
         $testUser = User::factory()->create([
             'name' => 'Test User',
             'email' => 'test@example.com',
+            'role' => 'user',
         ]);
 
         // Create additional users

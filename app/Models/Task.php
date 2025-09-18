@@ -23,14 +23,12 @@ class Task extends Model
         // Categorization
         'priority',
         'status',
-        'project_id',
         // Collaboration
         'assigned_to',
         'created_by',
         'updated_by',
         // System/meta
         'archived',
-        'position',
     ];
 
     protected $casts = [
@@ -40,7 +38,6 @@ class Task extends Model
         'due_date' => 'datetime',
         'completed_at' => 'datetime',
         'reminder_at' => 'datetime',
-        'position' => 'integer',
     ];
 
     // Relationships

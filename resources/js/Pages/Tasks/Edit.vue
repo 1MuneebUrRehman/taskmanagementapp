@@ -10,27 +10,38 @@ import Switch from "@/Components/Switch.vue";
 import TextArea from "@/Components/TextArea.vue";
 
 const props = defineProps({
-  task: Object
+  task: Object,
+  users: { type: Array, default: () => [] },
 });
+
+function toLocalMinutes(val) {
+  if (!val) return '';
+  // Handle strings like '2025-09-18 12:34:00' or ISO strings
+  try {
+    const s = String(val).replace(' ', 'T');
+    // Avoid timezone conversion; just trim to minutes
+    return s.substring(0, 16);
+  } catch (e) {
+    return '';
+  }
+}
 
 const form = useForm({
   title: props.task.title,
   description: props.task.description,
   is_completed: props.task.is_completed,
-  // Scheduling
-  start_date: props.task.start_date,
-  due_date: props.task.due_date,
-  completed_at: props.task.completed_at,
-  reminder_at: props.task.reminder_at,
+  // Scheduling (format for datetime-local)
+  start_date: toLocalMinutes(props.task.start_date),
+  due_date: toLocalMinutes(props.task.due_date),
+  completed_at: toLocalMinutes(props.task.completed_at),
+  reminder_at: toLocalMinutes(props.task.reminder_at),
   // Categorization
   priority: props.task.priority ?? 'normal',
   status: props.task.status ?? 'pending',
-  project_id: props.task.project_id,
   // Collaboration
   assigned_to: props.task.assigned_to,
   // System/meta
   archived: props.task.archived ?? false,
-  position: props.task.position,
 });
 
 function submitForm() {
@@ -218,7 +229,7 @@ function submitForm() {
           </div>
 
           <!-- Categorization -->
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <InputLabel for="priority">Priority</InputLabel>
               <select id="priority" v-model="form.priority" class="mt-1 w-full rounded-xl border-2 border-gray-200 dark:border-gray-600 bg-white/50 dark:bg-gray-700/50 px-3 py-2">
@@ -239,24 +250,17 @@ function submitForm() {
               </select>
               <InputError :message="form.errors.status" />
             </div>
-            <div>
-              <InputLabel for="project_id">Project ID</InputLabel>
-              <TextInput id="project_id" v-model="form.project_id" type="number" class="mt-1 w-full" />
-              <InputError :message="form.errors.project_id" />
-            </div>
           </div>
 
           <!-- Collaboration and Meta -->
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <InputLabel for="assigned_to">Assigned To (User ID)</InputLabel>
-              <TextInput id="assigned_to" v-model="form.assigned_to" type="number" class="mt-1 w-full" />
+              <InputLabel for="assigned_to">Assigned To</InputLabel>
+              <select id="assigned_to" v-model="form.assigned_to" class="mt-1 w-full rounded-xl border-2 border-gray-200 dark:border-gray-600 bg-white/50 dark:bg-gray-700/50 px-3 py-2">
+                <option :value="''">Unassigned</option>
+                <option v-for="u in props.users" :key="u.id" :value="u.id">{{ u.name }}</option>
+              </select>
               <InputError :message="form.errors.assigned_to" />
-            </div>
-            <div>
-              <InputLabel for="position">Position</InputLabel>
-              <TextInput id="position" v-model="form.position" type="number" min="0" class="mt-1 w-full" />
-              <InputError :message="form.errors.position" />
             </div>
             <div class="flex items-center gap-3 pt-6">
               <Switch id="archived" v-model="form.archived" />

@@ -29,8 +29,6 @@ return new class extends Migration
             // Categorization
             $table->string('priority', 20)->default('normal')->index(); // e.g., low, normal, high, urgent
             $table->string('status', 30)->default('pending')->index(); // e.g., pending, in_progress, completed, blocked
-            // Keeping project_id nullable and not constrained to avoid missing table issues
-            $table->unsignedBigInteger('project_id')->nullable()->index();
 
             // Collaboration
             $table->foreignId('assigned_to')->nullable()->constrained('users')->nullOnDelete()->cascadeOnUpdate();
@@ -39,7 +37,6 @@ return new class extends Migration
 
             // System/metadata
             $table->boolean('archived')->default(false)->index();
-            $table->unsignedInteger('position')->nullable()->index();
             $table->softDeletes();
             // ---- End appended fields ----
         });

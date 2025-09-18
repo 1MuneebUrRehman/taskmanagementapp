@@ -11,6 +11,7 @@ import TextArea from "@/Components/TextArea.vue";
 
 const props = defineProps({
   task: Object,
+  users: { type: Array, default: () => [] },
 });
 
 const form = useForm({
@@ -25,12 +26,10 @@ const form = useForm({
   // Categorization
   priority: 'normal',
   status: 'pending',
-  project_id: '',
   // Collaboration
   assigned_to: '',
   // System/meta
   archived: false,
-  position: ''
 });
 
 function submitForm() {
@@ -217,7 +216,7 @@ function submitForm() {
           </div>
 
           <!-- Categorization -->
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <InputLabel for="priority">Priority</InputLabel>
               <select id="priority" v-model="form.priority" class="mt-1 w-full rounded-xl border-2 border-gray-200 dark:border-gray-600 bg-white/50 dark:bg-gray-700/50 px-3 py-2">
@@ -238,24 +237,17 @@ function submitForm() {
               </select>
               <InputError :message="form.errors.status" />
             </div>
-            <div>
-              <InputLabel for="project_id">Project ID</InputLabel>
-              <TextInput id="project_id" v-model="form.project_id" type="number" class="mt-1 w-full" />
-              <InputError :message="form.errors.project_id" />
-            </div>
           </div>
 
           <!-- Collaboration and Meta -->
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <InputLabel for="assigned_to">Assigned To (User ID)</InputLabel>
-              <TextInput id="assigned_to" v-model="form.assigned_to" type="number" class="mt-1 w-full" />
+              <InputLabel for="assigned_to">Assigned To</InputLabel>
+              <select id="assigned_to" v-model="form.assigned_to" class="mt-1 w-full rounded-xl border-2 border-gray-200 dark:border-gray-600 bg-white/50 dark:bg-gray-700/50 px-3 py-2">
+                <option :value="''">Unassigned</option>
+                <option v-for="u in props.users" :key="u.id" :value="u.id">{{ u.name }}</option>
+              </select>
               <InputError :message="form.errors.assigned_to" />
-            </div>
-            <div>
-              <InputLabel for="position">Position</InputLabel>
-              <TextInput id="position" v-model="form.position" type="number" min="0" class="mt-1 w-full" />
-              <InputError :message="form.errors.position" />
             </div>
             <div class="flex items-center gap-3 pt-6">
               <Switch id="archived" v-model="form.archived" />

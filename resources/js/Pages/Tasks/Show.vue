@@ -185,16 +185,10 @@ function deleteTask() {
               <div class="text-sm text-gray-600 dark:text-gray-400 capitalize">{{ props.task.status }}</div>
             </div>
             <div class="space-y-2">
-              <div class="text-base font-medium text-gray-900 dark:text-white">Project ID</div>
-              <div class="text-sm text-gray-600 dark:text-gray-400">{{ props.task.project_id || '-' }}</div>
             </div>
             <div class="space-y-2">
               <div class="text-base font-medium text-gray-900 dark:text-white">Assigned To</div>
               <div class="text-sm text-gray-600 dark:text-gray-400">{{ props.task.assigned_to || '-' }}</div>
-            </div>
-            <div class="space-y-2">
-              <div class="text-base font-medium text-gray-900 dark:text-white">Position</div>
-              <div class="text-sm text-gray-600 dark:text-gray-400">{{ props.task.position ?? '-' }}</div>
             </div>
             <div class="space-y-2">
               <div class="text-base font-medium text-gray-900 dark:text-white">Archived</div>

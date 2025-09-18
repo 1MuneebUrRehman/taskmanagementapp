@@ -48,6 +48,24 @@ const showingNavigationDropdown = ref(false);
                   <span>Tasks</span>
                 </div>
               </NavLink>
+
+              <template v-if="$page.props.auth.user.role === 'super-admin'">
+                <NavLink
+                    :active="route().current('users.index')"
+                    :href="route('users.index')"
+                    class="px-4 py-2 rounded-xl font-medium transition-all duration-200 hover:bg-white/60 dark:hover:bg-gray-800/60"
+                    :class="route().current('users.index') ?
+                                      'bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white shadow-lg shadow-fuchsia-500/25' :
+                                      'text-gray-700 dark:text-gray-300 hover:text-violet-600 dark:hover:text-fuchsia-400'"
+                >
+                  <div class="flex items-center space-x-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m0 0a4 4 0 118 0A4 4 0 017 14.13" />
+                    </svg>
+                    <span>Users</span>
+                  </div>
+                </NavLink>
+              </template>
             </div>
           </div>
 
@@ -142,6 +160,22 @@ const showingNavigationDropdown = ref(false);
             </svg>
             <span>Tasks</span>
           </ResponsiveNavLink>
+
+          <template v-if="$page.props.auth.user.role === 'super-admin'">
+            <ResponsiveNavLink
+                :active="route().current('users.index')"
+                :href="route('users.index')"
+                class="flex items-center space-x-2 px-4 py-3 rounded-xl"
+                :class="route().current('users.index') ?
+                              'bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white' :
+                              'text-gray-700 dark:text-gray-300 hover:bg-violet-50 dark:hover:bg-gray-800'"
+            >
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m0 0a4 4 0 118 0A4 4 0 017 14.13" />
+              </svg>
+              <span>Users</span>
+            </ResponsiveNavLink>
+          </template>
         </div>
 
         <!-- Mobile User Menu -->

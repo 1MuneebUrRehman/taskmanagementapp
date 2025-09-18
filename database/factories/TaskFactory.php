@@ -39,7 +39,6 @@ class TaskFactory extends Factory
             'reminder_at' => $this->faker->optional()->dateTimeBetween('-1 week', '+1 month'),
             'priority' => Arr::random(['low','normal','high','urgent']),
             'status' => $status,
-            'project_id' => $this->faker->optional()->numberBetween(1, 10),
             'assigned_to' => function () {
                 // 60% chance of assigning to an existing user, else null
                 if ($this->faker->boolean(60)) {
@@ -55,7 +54,6 @@ class TaskFactory extends Factory
                 return $attributes['created_by'] ?? (User::query()->inRandomOrder()->value('id') ?? User::factory());
             },
             'archived' => $this->faker->boolean(10),
-            'position' => $this->faker->optional()->numberBetween(1, 500),
         ];
     }
 }

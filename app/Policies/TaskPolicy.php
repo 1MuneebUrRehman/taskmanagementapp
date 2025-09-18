@@ -12,7 +12,7 @@ class TaskPolicy
      */
     public function viewAny(User $user): bool
     {
-        return true; // Any authenticated user can list their tasks via scoped queries
+        return true; // Any authenticated user can list their tasks via scoped queries; super-admin can list all
     }
 
     /**
@@ -20,6 +20,7 @@ class TaskPolicy
      */
     public function view(User $user, Task $task): bool
     {
+        if ($user->isSuperAdmin()) return true;
         return $task->user_id === $user->id;
     }
 
@@ -36,6 +37,7 @@ class TaskPolicy
      */
     public function update(User $user, Task $task): bool
     {
+        if ($user->isSuperAdmin()) return true;
         return $task->user_id === $user->id;
     }
 
@@ -44,6 +46,7 @@ class TaskPolicy
      */
     public function delete(User $user, Task $task): bool
     {
+        if ($user->isSuperAdmin()) return true;
         return $task->user_id === $user->id;
     }
 
@@ -52,6 +55,7 @@ class TaskPolicy
      */
     public function restore(User $user, Task $task): bool
     {
+        if ($user->isSuperAdmin()) return true;
         return $task->user_id === $user->id;
     }
 

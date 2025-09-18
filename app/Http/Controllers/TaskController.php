@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Task;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
@@ -11,12 +12,11 @@ class TaskController extends Controller
 {
     public function index(Request $request)
     {
-        $query = auth()->user()->tasks()
+        $base = auth()->user()->isSuperAdmin() ? Task::query() : auth()->user()->tasks();
+        $query = $base
             ->when($request->filled('status'), fn($q) => $q->where('status', $request->string('status')))
             ->when($request->filled('priority'), fn($q) => $q->where('priority', $request->string('priority')))
             ->when($request->filled('archived'), fn($q) => $q->where('archived', filter_var($request->input('archived'), FILTER_VALIDATE_BOOLEAN)))
-            ->orderByRaw('CASE WHEN position IS NULL THEN 1 ELSE 0 END')
-            ->orderBy('position')
             ->orderByDesc('created_at');
 
         $tasks = $query->paginate(10)->withQueryString();
@@ -41,12 +41,10 @@ class TaskController extends Controller
             // Categorization
             'priority' => ['nullable','string', Rule::in(['low','normal','high','urgent'])],
             'status' => ['nullable','string', Rule::in(['pending','in_progress','completed','blocked'])],
-            'project_id' => ['nullable','integer'],
             // Collaboration
             'assigned_to' => ['nullable','exists:users,id'],
             // System/meta
             'archived' => ['sometimes','boolean'],
-            'position' => ['nullable','integer','min:0'],
         ]);
 
         // Defaults
@@ -74,7 +72,10 @@ class TaskController extends Controller
 
     public function create()
     {
-        return Inertia::render('Tasks/Create');
+        $users = User::select('id','name')->orderBy('name')->get();
+        return Inertia::render('Tasks/Create', [
+            'users' => $users,
+        ]);
     }
 
     public function show(Task $task)
@@ -89,8 +90,10 @@ class TaskController extends Controller
      */
     public function edit(Task $task)
     {
+        $users = User::select('id','name')->orderBy('name')->get();
         return Inertia::render('Tasks/Edit', [
-            'task' => $task
+            'task' => $task,
+            'users' => $users,
         ]);
     }
 
@@ -111,12 +114,10 @@ class TaskController extends Controller
             // Categorization
             'priority' => ['nullable','string', Rule::in(['low','normal','high','urgent'])],
             'status' => ['nullable','string', Rule::in(['pending','in_progress','completed','blocked'])],
-            'project_id' => ['nullable','integer'],
             // Collaboration
             'assigned_to' => ['nullable','exists:users,id'],
             // System/meta
             'archived' => ['sometimes','boolean'],
-            'position' => ['nullable','integer','min:0'],
         ]);
 
         // Handle status/completion coherence
